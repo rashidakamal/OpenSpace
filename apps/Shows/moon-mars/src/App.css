@@ -1,0 +1,68 @@
+
+html {
+  background-color: #222;
+}
+
+label.checked {
+  color: #0a0;
+}
+
+.connection-status {
+  transition: all 0.5s;
+  height: 20px;
+  width: calc(100% - 1em);
+  padding: 0.5em;
+}
+
+.connection-status-connected {
+  background-color: #080;
+  color: #efe;
+}
+
+.connection-status-disconnected {
+  background-color: #800;
+  color: #fee;
+}
+
+.configuration-card {
+  background-color: #111;
+  margin: 1em;
+  padding: 0.5em;
+  color: #eee;
+}
+
+.card {
+  background-color: #111;
+  margin: 1em;
+  padding: 0.5em;
+  color: #eee;
+}
+
+
+button {
+  transition: all 0.5s;
+  border-radius: 0.2em;
+  background-color: #080;
+  color: #efe;
+  border: none;
+  padding: 0.5em;
+  color: #fff;
+  margin-right: 0.2em;
+  margin-bottom: 0.2em;
+}
+
+button.disconnected {
+  background-color: #777;
+}
+
+button.disconnected:hover {
+  background-color: #777;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+button:hover {
+  background-color: #0a0;
+}
