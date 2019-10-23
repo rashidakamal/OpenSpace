@@ -10,18 +10,6 @@ var TimeButtons = {
     'Realtime': () => { 
       openspace.time.interpolateDeltaTime(1)
     },
-    '5 sec/sec': () => { 
-      openspace.time.interpolateDeltaTime(5)
-    },    
-    '30 sec/sec': () => { 
-      openspace.time.interpolateDeltaTime(30)
-    },    
-    '1 min/sec': () => { 
-      openspace.time.interpolateDeltaTime(60)
-    },    
-    '10 min/sec': () => { 
-      openspace.time.interpolateDeltaTime(600)
-    },    
     '1 hr/sec': () => { 
       openspace.time.interpolateDeltaTime(3600)
     },    
@@ -30,19 +18,27 @@ var TimeButtons = {
     },    
     '12 hr/sec': () => { 
       openspace.time.interpolateDeltaTime(43200)
-    },    
-    '1 day/sec': () => { 
-      openspace.time.interpolateDeltaTime(86400)
-    },    
-    '7 day/sec': () => { 
-      openspace.time.interpolateDeltaTime(604800)
-    },    
-    '1 mo/sec': () => { 
-      openspace.time.interpolateDeltaTime(2592000)
+    },  
+    'Travel back in Time': () => { 
+      openspace.time.interpolateTimeRelative(-8.640000E+04,1.000000E+00)
+    },   
+  }
+};
+
+var CaptureButtons = {
+  title: "Capture Controls",
+  buttons: {
+    'Start Recording': () => { 
+      openspace.sessionRecording.startRecording("test3")
     },
-    '1 yr/sec': () => { 
-      openspace.time.interpolateDeltaTime(31536000)
-    },    
+    'Stop Recording': async () => { 
+      openspace.sessionRecording.stopRecording()
+    },  
+    'Playback Recording': async () => { 
+      openspace.sessionRecording.startPlayback("test3")
+      openspace.sessionRecording.stopRecording()
+
+    },   
   }
 };
 
@@ -60,14 +56,6 @@ var VisualButtons = {
         const duration = 1;
         openspace.setPropertyValue("Scene.*Trail.Renderable.Enabled", true)  
         openspace.setPropertyValue("Scene.*Trail.Renderable.Opacity", 1, 1)
-    },
-    'Fade screen to/from black': async () => { 
-      var blackoutFactor = await openspace.getPropertyValue('RenderEngine.BlackoutFactor');
-      if (blackoutFactor[1] > 0.5) {
-        openspace.setPropertyValueSingle('RenderEngine.BlackoutFactor', 0.0, 3)
-      } else {
-        openspace.setPropertyValueSingle('RenderEngine.BlackoutFactor', 1.0, 3)
-      }
     },
   }
 };
@@ -118,4 +106,4 @@ var SystemButtons = {
     },
   }
 };
-var defaultButtonGroups = [TimeButtons, VisualButtons, FrictionButtons];
+var defaultButtonGroups = [TimeButtons, CaptureButtons, VisualButtons];

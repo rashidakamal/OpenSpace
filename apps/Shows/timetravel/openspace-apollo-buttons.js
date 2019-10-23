@@ -57,21 +57,19 @@ var disableSites = function() {
   openspace.setPropertyValueSingle('Scene.Moon.Renderable.Layers.HeightLayers.LRO_NAC_Apollo_17.Enabled', false);
 }
 //now setup all the buttons
-var siteButtons = {
-  title: "Site Setup",
-  buttons: {
-    'Setup Apollo 11 site': () => {setupApollo11Site(); },
-    'Setup Apollo 17 site': () => {setupApollo17Site(); },
-    'Disable all sites': () => { disableSites(); }
-  }
-};
+// var siteButtons = {
+//   title: "Site Setup",
+//   buttons: {
+//     'Setup Apollo 11 site': () => {setupApollo11Site(); },
+//     'Setup Apollo 17 site': () => {setupApollo17Site(); },
+//     'Disable all sites': () => { disableSites(); }
+//   }
+// };
 var focusButtons = {
   title: "Set Focus",
   buttons: {
     'Focus on Moon': () => {setFocus('Moon')},
-    'Focus on Apollo 11 Lem': () => {setFocus('Apollo11LemModel')},
-    'Focus on Apollo 11 Orbiter': () => {setFocus('Apollo11')},
-    'Focus on Apollo 17 Lem': () => {setFocus('Apollo17LemModel')}
+    'Focus on Earth': () => {setFocus('Earth')},
   }
 };
 var trailButtons = {
@@ -84,4 +82,4 @@ var trailButtons = {
   }
 };
 
-var apolloButtonGroups = [siteButtons, focusButtons, trailButtons];
+var apolloButtonGroups = [focusButtons, trailButtons];
