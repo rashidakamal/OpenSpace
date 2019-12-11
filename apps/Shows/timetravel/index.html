@@ -1,93 +1,494 @@
 <html>
   <head>
-    <title>Time Travel</title>
+    <title>Tour the Solar System</title>
     <link rel="stylesheet" type="text/css" href="main.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Lilita+One&display=swap" rel="stylesheet">
+
     <script type="text/javascript" src="openspace-api.js"></script>
-    <script type="text/javascript" src="openspace-apollo-buttons.js"></script>
-    <script type="text/javascript" src="openspace-default-buttons.js"></script>
+
     <script type="text/javascript">
-      //variable for js libarary
-      var openspace = null;
-      
-      var htmlFunction = (action, id) => {
-          var cardHTML = "<div id=\"" + action.title + "\" class='card'><h2>" + action.title + "</h2>";
-          if (action.description) {
-            action.description.split('\n').map(item => {
-              cardHTML += "<p>" + item + "</p>";
-            });
-          }
-          if (action.buttons) {
-            Object.keys(action.buttons).map(button => {
-              const fn = action.buttons[button];
-              cardHTML += "<button id=\"" + action.title+button + "\">"+ button +"</button>";
-            });
-          }
-          cardHTML += "</div>";
-          document.getElementById('main').innerHTML += cardHTML;
-      };
-      var clickFunction = (action, id) => {
-        if (action.buttons) {
-          Object.keys(action.buttons).map(button => {
-              const fn = action.buttons[button];
-              document.getElementById(action.title+button).addEventListener("click", fn);
-          });
-        }
-      }
-      //helper function to map the buttons to html
-      function mapButtons(openspace) {
+
+        var openspace = null;
+        var storyboard = []; 
+        var counter = 0; 
+        var keepInterval; 
+        
+        //helper function to map the buttons to html
+        function mapButtons(openspace) {
+
         apolloButtonGroups.map(htmlFunction);
         document.getElementById('main').innerHTML += "<div class='card'>Default Buttons</div>"
         defaultButtonGroups.map(htmlFunction);
         apolloButtonGroups.map(clickFunction);
         defaultButtonGroups.map(clickFunction);
-      }
-      //helper function to connect to opensapce
-      var connectToOpenSpace = () => {
+        }
+        //helper function to connect to opensapce
+        var connectToOpenSpace = () => {
         //setup the api params
         var host = document.getElementById('ipaddress').value;
         var api = window.openspaceApi(host, 4682);
         //notify users on disconnect
         api.onDisconnect(() => {
-          console.log("disconnected");
-          document.getElementById('container').className = "disconnected";
-          var disconnectedString = "Connect to OpenSpace: ";
-          disconnectedString += '<input id="ipaddress" type=text placeholder="Enter ip address" /> ';
-          disconnectedString += '<button onClick="connectToOpenSpace();">Connect</button>';
-          document.getElementById('connection-status').innerHTML = disconnectedString;
-          openspace = null;
+            console.log("disconnected");
+            document.getElementById('container').className = "disconnected";
+            var disconnectedString = "Connect to OpenSpace: ";
+            disconnectedString += '<input id="ipaddress" type=text placeholder="Enter ip address" /> ';
+            disconnectedString += '<button onClick="connectToOpenSpace();">Connect</button>';
+            document.getElementById('connection-status').innerHTML = disconnectedString;
+            openspace = null;
         });
         //notify users and map buttons when connected
         api.onConnect(async () => {
-          try {
+            try {
             document.getElementById('container').className = "connected";
             document.getElementById('connection-status').innerHTML = "Connected to OpenSpace";
             openspace = await api.library();
             console.log('connected');
             mapButtons(openspace);
-          } catch (e) {
+            } catch (e) {
             console.log('OpenSpace library could not be loaded: Error: \n', e)
             return;
-          }
+            }
         })
         //connect
         api.connect();
-      };
+        };
+
+        var PlanetButtons = {
+            title: "Planet Controls",
+            buttons: {
+                'mercury': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Mercury')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },
+                'venus': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Venus')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },
+                'earth': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Earth')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },  
+                'luna': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Moon')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                }, 
+                'mars': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Mars')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },  
+                'phobos': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Phobos')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },  
+                'deimos': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Deimos')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },  
+                'jupiter': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Jupiter')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },  
+                'europa': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Europa')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                }, 
+                'io': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Io')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                }, 
+                'ganymede': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Ganymede')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },
+                'callisto': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Callisto')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },
+                'saturn': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Saturn')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },
+                'titan': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Titan')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },
+                'enceladus': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Enceladus')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },
+                'uranus': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Uranus')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },
+                'neptune': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Neptune')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },
+                'pluto': () => { 
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Anchor", 'Pluto')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.Aim", '')
+                openspace.setPropertyValueSingle("NavigationHandler.OrbitalNavigator.RetargetAnchor", null)
+                },
+            }
+        };
+
+        function playPrevious(){
+
+            console.log("in Previous"); 
+            counter--;
+
+            if (counter < 0) {
+                counter = 0; 
+            }
+
+            var location = storyboard[counter]["stop"];
+            var speech = storyboard[counter]["message"];
+
+            setTimeout(PlanetButtons.buttons[location], 1000);
+            setTimeout(playSpeech(speech), 5000);
+
+
+        }
+
+        function playSpeech(text){
+
+            var words = new SpeechSynthesisUtterance(text); 
+            speechSynthesis.speak(words);
+
+        }
+
+        function playNext(){
+
+            console.log("in Next");
+            if (counter > storyboard.lenghth) {
+                counter = 0; 
+            }
+
+            var location = storyboard[counter]["stop"];
+            var speech = storyboard[counter]["message"];
+
+            setTimeout(PlanetButtons.buttons[location], 1000);
+            setTimeout(playSpeech(speech), 5000);
+
+            counter++;
+            
+        }
+
+
+
+        function playStoryboard(){
+
+            openspace.time.interpolateDeltaTime(3600,1);
+            openspace.time.interpolateTogglePause();
+
+        }
+
+        function resetPage(){
+
+            var x = document.getElementById("content");
+            x.style.display = "none";
+
+            var y = document.getElementById("tourControls");
+            y.style.display = "block";
+
+            counter = 0; 
+            openspace.time.interpolateTimeRelative(-3.153600E+07,1.000000E+00)
+
+
+        }
+
+        function recordValues(e){
+
+            // if I hadn't written my HTML like a monster, I probably wouldn't have to live like this... 
+
+            // terrible but here we are:
+            var firstSelection = document.getElementById("first").value;
+            var secondSelection = document.getElementById("second").value; 
+            var thirdSelection = document.getElementById("third").value; 
+            var fourthSelection = document.getElementById("fourth").value; 
+            var fifthSelection = document.getElementById("fifth").value;  
+
+            var firstMSG = document.getElementById("first_msg").value; 
+            var secondMSG = document.getElementById("second_msg").value;
+            var thirdMSG = document.getElementById("third_msg").value;
+            var fourthMSG = document.getElementById("fourth_msg").value;
+            var fifthMSG = document.getElementById("fifth_msg").value;
+
+            // var firstDuration = document.getElementById("first_duration").value; 
+            // var secondDuration = document.getElementById("second_duration").value;
+            // var thirdDuration = document.getElementById("third_duration").value;
+            // var fourthDuration = document.getElementById("fourth_duration").value;
+            // var fifthDuration = document.getElementById("fifth_duration").value;
+
+            // regretting all my life choices, yes
+
+            var firstStop = {"stop": firstSelection, "message": firstMSG}; 
+            storyboard.push(firstStop); 
+
+            var secondStop = {"stop": secondSelection, "message": secondMSG}; 
+            storyboard.push(secondStop); 
+
+            var thirdStop = {"stop": thirdSelection, "message": thirdMSG}; 
+            storyboard.push(thirdStop); 
+
+            var fourthStop = {"stop": fourthSelection, "message": fourthMSG}; 
+            storyboard.push(fourthStop); 
+
+            var fifthStop = {"stop": fifthSelection, "message": fifthMSG}; 
+            storyboard.push(fifthStop); 
+
+            // write storyboard to a local txt file?
+            console.log(storyboard);
+            setTimeout(resetPage, 1000);
+        }
+
     </script>
   </head>
   <body>
-    <!-- HTML Containers -->
+
     <div id="container" class="disconnected">
-      <div id="connection-status" class="connection-status">
-        Connect to OpenSpace:
-        <input id='ipaddress' type=text placeholder="Enter ip address"/> 
-        <button onClick="connectToOpenSpace();">Connect</button>
-      </div>
-      <div id="main">
-        <div class='card'>Apollo Site Buttons</div>
-      </div>
-      <script type="text/javascript">
-        connectToOpenSpace('localhost');
-      </script>
-    </div>
-  <body>
+        <div id="connection-status" class="connection-status">
+            Connect to OpenSpace:
+            <input id='ipaddress' type=text placeholder="Enter ip address"/> 
+            <button onClick="connectToOpenSpace();">Connect</button>
+        </div>
+        <div><center><h1>Roast Tour of <br>the Solar System</h1></center></div>
+        <div id="main"><center>
+
+            <div id="content">
+                <table>
+                        <tr>
+                          <td>1</td>
+                          <td>
+
+                                <select class="custom-select" id="first">
+                                        <option value="mercury">Mercury</option>
+                                        <option value="venus">Venus</option>
+                                        <option value="earth">Earth</option>
+                                        <option value="luna">-- Luna</option>
+                                        <option value="mars">Mars</option>
+                                        <option value="phobos">-- Phobos</option>
+                                        <option value="deimos">-- Deimos</option>
+                                        <option value="jupiter">Jupiter</option>
+                                        <option value="europa">-- Europa</option>
+                                        <option value="io">-- Io</option>
+                                        <option value="ganymede">-- Ganymede</option>
+                                        <option value="callisto">-- Callisto</option>
+                                        <option value="saturn">Saturn</option>
+                                        <option value="titan">-- Titan</option>
+                                        <option value="enceladus">-- Enceladus</option>
+                                        <option value="uranus">Uranus</option>
+                                        <option value="neptune">Neptune</option>
+                                        <option value="pluto">Pluto</option>
+                                      </select> 
+
+                          </td>
+                          <td><center>Enter a message for this stop:<br> <textarea id="first_msg" rows="4" cols="50" value></textarea></center> </td>
+                        <!-- <td>
+                            Enter a duration for this stop:<br>
+                            <select class="custom-select" id="first_duration">
+                                    <option value="15">15 seconds</option>
+                                    <option value="30">30 seconds</option>
+                                    <option value="45">45 seconds</option>
+                                    <option value="60">60 seconds</option>
+                            </select>
+                        </td> -->
+                        </tr>
+                        <tr>
+                                <td>2</td>
+                                <td>
+
+                                        <select class="custom-select" id="second">
+                                                <option value="mercury">Mercury</option>
+                                                <option value="venus">Venus</option>
+                                                <option value="earth">Earth</option>
+                                                <option value="luna">-- Luna</option>
+                                                <option value="mars">Mars</option>
+                                                <option value="phobos">-- Phobos</option>
+                                                <option value="deimos">-- Deimos</option>
+                                                <option value="jupiter">Jupiter</option>
+                                                <option value="europa">-- Europa</option>
+                                                <option value="io">-- Io</option>
+                                                <option value="ganymede">-- Ganymede</option>
+                                                <option value="callisto">-- Callisto</option>
+                                                <option value="saturn">Saturn</option>
+                                                <option value="titan">-- Titan</option>
+                                                <option value="enceladus">-- Enceladus</option>
+                                                <option value="uranus">Uranus</option>
+                                                <option value="neptune">Neptune</option>
+                                                <option value="pluto">Pluto</option>
+                                              </select>
+
+                                </td>
+                               
+                                <td><center>Enter a message for this stop:<br> <textarea id="second_msg" rows="4" cols="50" value></textarea></center></td>
+                                
+                                <!-- <td>
+                                        Enter a duration for this stop:<br>
+                                        <select class="custom-select" id="second_duration">
+                                                <option value="15">15 seconds</option>
+                                                <option value="30">30 seconds</option>
+                                                <option value="45">45 seconds</option>
+                                                <option value="60">60 seconds</option>
+                                        </select>
+                                    </td> -->
+                        </tr>
+                        <tr>
+                                <td>3</td>
+                                <td>
+
+                                        <select class="custom-select" id="third">
+                                                <option value="mercury">Mercury</option>
+                                                <option value="venus">Venus</option>
+                                                <option value="earth">Earth</option>
+                                                <option value="luna">-- Luna</option>
+                                                <option value="mars">Mars</option>
+                                                <option value="phobos">-- Phobos</option>
+                                                <option value="deimos">-- Deimos</option>
+                                                <option value="jupiter">Jupiter</option>
+                                                <option value="europa">-- Europa</option>
+                                                <option value="io">-- Io</option>
+                                                <option value="ganymede">-- Ganymede</option>
+                                                <option value="callisto">-- Callisto</option>
+                                                <option value="saturn">Saturn</option>
+                                                <option value="titan">-- Titan</option>
+                                                <option value="enceladus">-- Enceladus</option>
+                                                <option value="uranus">Uranus</option>
+                                                <option value="neptune">Neptune</option>
+                                                <option value="pluto">Pluto</option>
+                                              </select>
+
+                                </td>
+                                <td><center>Enter a message for this stop:<br> <textarea id="third_msg" rows="4" cols="50" value></textarea></center> </td>
+                                <!-- <td>
+                                        Enter a duration for this stop:<br>
+                                        <select class="custom-select" id="third_duration">
+                                                <option value="15">15 seconds</option>
+                                                <option value="30">30 seconds</option>
+                                                <option value="45">45 seconds</option>
+                                                <option value="60">60 seconds</option>
+                                        </select>
+                                    </td> -->
+                            </tr>
+
+                        <tr>
+                                <td>4</td>
+                                <td>
+
+                                        <select class="custom-select" id="fourth">
+                                                <option value="mercury">Mercury</option>
+                                                <option value="venus">Venus</option>
+                                                <option value="earth">Earth</option>
+                                                <option value="luna">-- Luna</option>
+                                                <option value="mars">Mars</option>
+                                                <option value="phobos">-- Phobos</option>
+                                                <option value="deimos">-- Deimos</option>
+                                                <option value="jupiter">Jupiter</option>
+                                                <option value="europa">-- Europa</option>
+                                                <option value="io">-- Io</option>
+                                                <option value="ganymede">-- Ganymede</option>
+                                                <option value="callisto">-- Callisto</option>
+                                                <option value="saturn">Saturn</option>
+                                                <option value="titan">-- Titan</option>
+                                                <option value="enceladus">-- Enceladus</option>
+                                                <option value="uranus">Uranus</option>
+                                                <option value="neptune">Neptune</option>
+                                                <option value="pluto">Pluto</option>
+                                              </select>
+
+                                </td>
+                                <td><center>Enter a message for this stop:<br> <textarea id="fourth_msg" rows="4" cols="50" value></textarea></center></td>
+                                <!-- <td>
+                                        Enter a duration for this stop:<br>
+                                        <select class="custom-select" id="fourth_duration">
+                                                <option value="15">15 seconds</option>
+                                                <option value="30">30 seconds</option>
+                                                <option value="45">45 seconds</option>
+                                                <option value="60">60 seconds</option>
+                                        </select>
+                                    </td> -->
+                            </tr>
+
+                        <tr>
+                                <td>5</td>
+                                <td>
+
+                                        <select class="custom-select" id="fifth">
+                                                <option value="mercury">Mercury</option>
+                                                <option value="venus">Venus</option>
+                                                <option value="earth">Earth</option>
+                                                <option value="luna">-- Luna</option>
+                                                <option value="mars">Mars</option>
+                                                <option value="phobos">-- Phobos</option>
+                                                <option value="deimos">-- Deimos</option>
+                                                <option value="jupiter">Jupiter</option>
+                                                <option value="europa">-- Europa</option>
+                                                <option value="io">-- Io</option>
+                                                <option value="ganymede">-- Ganymede</option>
+                                                <option value="callisto">-- Callisto</option>
+                                                <option value="saturn">Saturn</option>
+                                                <option value="titan">-- Titan</option>
+                                                <option value="enceladus">-- Enceladus</option>
+                                                <option value="uranus">Uranus</option>
+                                                <option value="neptune">Neptune</option>
+                                                <option value="pluto">Pluto</option>
+                                        </select>
+
+                                </td>
+                                <td><center>Enter a message for this stop:<br> <textarea id="fifth_msg" rows="4" cols="50" value></textarea></center></td>
+                                <!-- <td>
+                                        Enter a duration for this stop:<br>
+                                        <select class="custom-select" id="fifth_duration">
+                                                <option value="15">15 seconds</option>
+                                                <option value="30">30 seconds</option>
+                                                <option value="45">45 seconds</option>
+                                                <option value="60">60 seconds</option>
+                                        </select>
+                                    </td> -->
+                            </tr>
+                    </table>
+                        <br>
+                    <button onclick="recordValues(this)">Submit Storyboard</button>
+                </div>
+                <div id="tourControls">
+                        <center>
+
+                                <!-- https://thenounproject.com/search/?q=solar%20system&i=186394 -->
+                                <img src="solar system.svg" width=15%><br><br>
+                        <button onclick="playPrevious()">Previous</button>
+                        <button onclick="playStoryboard()">Play / Pause</button>
+                        <button onclick="playNext()">Next</button><br><br>
+                    </center>
+                        
+
+                </div>
+
+            
+                </center>
+        </div>
+        <script type="text/javascript">
+            connectToOpenSpace('localhost');
+
+        </script>
+        </div>
+</body>
 </html>
